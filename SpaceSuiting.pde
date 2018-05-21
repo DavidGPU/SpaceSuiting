@@ -1,4 +1,4 @@
-import processing.sound.*;
+
 SoundFile backgroundMusic;
 SoundFile soundEffect;
 
@@ -13,6 +13,7 @@ ArrayList<Spaceship> spaceships;
 ArrayList<PlayerProjectile> playerProjectiles;
 ArrayList<Enemy> enemies;
 ArrayList<Enemy> bossEnemies1;
+ArrayList<Enemy> bossEnemies2;
 ArrayList<CommonEnemyProjectile> commonEnemyProjectiles;
 ArrayList<DamageCollectible> damageCollectibles;
 ArrayList<HealthCollectible> healthCollectibles;
@@ -58,7 +59,7 @@ void setup() {
   size(1400, 1000, P2D);
   noSmooth();
   frameRate(60);
-  backgroundMusic = new SoundFile(this, "battle_at_the_top.flac"); //The music that plays
+  backgroundMusic = new SoundFile(this, "Yayeyi.flac"); //The music that plays
 
   playerProjectiles = new ArrayList<PlayerProjectile>();
 
@@ -74,6 +75,7 @@ void setup() {
 
   enemies = new ArrayList<Enemy>();
   bossEnemies1 = new ArrayList<Enemy>();
+  bossEnemies2 = new ArrayList<Enemy>();
 
   spawnManagers = new ArrayList<SpawnManager>();
 
@@ -82,8 +84,10 @@ void setup() {
   //SpotNick:  7 damage
   //MightShooter:  40 damage
   //TriShooter:  6 damage
-  Spaceship spaceship = new TriShooter(new PVector(700, 400), new PVector(0, 0), 0, 2, "player_trishooter.png", new BoundingBox(new PVector(0, 0), new PVector(12, 12)), 9, 0, 6);
+  Spaceship spaceship = new SpotNick(new PVector(700, 400), new PVector(0, 0), 0, 2, "player_spot_nick.png", new BoundingBox(new PVector(0, 0), new PVector(12, 12)), 9, 0, 7);
   spaceships.add(spaceship);
+  //Enemy importableComputer = new ImportableComputer(new PVector(700, 0), new PVector(0, 0.1), 0, 2, "enemy_importablecomputer.png", new BoundingBox(new PVector(0, 0), new PVector(120, 120)), 9, 0, 20000);
+  //bossEnemies2.add(importableComputer);
 
   SpawnManager spawnManager = new SpawnManager(10, 0, 0);
   spawnManagers.add(spawnManager);
@@ -158,6 +162,13 @@ void draw() {
     if (be1.isDownTheScreen())
       zombieenemies.add(be1);
   }
+  for (Enemy be2 : bossEnemies2) {
+    be2.update();
+    if (be2.isDead())
+      zombieenemies.add(be2);  
+    if (be2.isDownTheScreen())
+      zombieenemies.add(be2);
+  }
 
   if (oneKeyPressed)
     difficulty = 1;
@@ -169,6 +180,7 @@ void draw() {
   commonEnemyProjectiles.removeAll(zombies);
   enemies.removeAll(zombieenemies);
   bossEnemies1.removeAll(zombieenemies);
+  bossEnemies2.removeAll(zombieenemies);
   playerProjectiles.removeAll(zombies);
   spaceships.removeAll(zombiesSpaceship);
   damageCollectibles.removeAll(zombieDamageCollectibles);
@@ -185,6 +197,10 @@ void draw() {
     enemy.display();
   }
   for (Enemy vfrm : bossEnemies1) {
+    vfrm.update();
+    vfrm.display();
+  }
+  for (Enemy vfrm : bossEnemies2) {
     vfrm.update();
     vfrm.display();
   }
