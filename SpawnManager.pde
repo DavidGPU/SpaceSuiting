@@ -10,7 +10,7 @@ class SpawnManager { //I'm having a bug where it doesn't change to level 2, some
   float spawnPoints;
   float spawnLevel;
   float spawnLevelLevel;
-  float stage = 1; 
+  float stage = 1; //Change to switch the stage, avaible stages 1 and 2 
 
   long shopSpawnHealthCollectible;
   long shopSpawnSuperDamageCollectible;
@@ -43,6 +43,21 @@ class SpawnManager { //I'm having a bug where it doesn't change to level 2, some
         spawnLevelLevel = 0;
       }
     }
+    for (Enemy be2 : bossEnemies2) {
+      if (be2.isDead()) {
+        println("now");
+        bossPrepared = false;
+        bossHere = false;
+        bossSpawned = false;
+        stagePhaseTime = 0;
+        stage = 3;
+        spawnPeriod = 0;
+        spawnPoints = 0;
+        spawnLevel = 0;
+        spawnLevelLevel = 0;
+      }
+    }
+
     if (stage == 1)
       stagePhaseTimeSet = 30000;
     if (stage == 2)
@@ -57,15 +72,15 @@ class SpawnManager { //I'm having a bug where it doesn't change to level 2, some
       spawnEliteLilShip();
       spawnPoints -= 40;
     }
-    if (millis() - lastSpawn > spawnPeriod * random(6) && spawnPoints >= 50 && stage == 1 && spawnLevel <= 400) {
+    if (millis() - lastSpawn > spawnPeriod * random(6) && spawnPoints >= 50 && stage == 1 && spawnLevel <= 300) {
       spawnArchShip();
       spawnPoints -= 50;
     }
-    if (millis() - lastSpawn > spawnPeriod * random(6) && spawnPoints >= 60 && stage == 1 && spawnLevel <= 1000) {
+    if (millis() - lastSpawn > spawnPeriod * random(6) && spawnPoints >= 60 && stage == 1 && spawnLevel <= 900) {
       spawnFatRocket();
       spawnPoints -= 60;
     }
-    if (millis() - lastSpawn > spawnPeriod * random(5) && spawnPoints >= 80 && stage ==1) {
+    if (millis() - lastSpawn > spawnPeriod * random(5) && spawnPoints >= 80 && stage ==1 && spawnLevel <= 1000) {
       spawnLilX();
       spawnPoints -= 80;
     }
@@ -77,20 +92,20 @@ class SpawnManager { //I'm having a bug where it doesn't change to level 2, some
       spawnHyperLilShip();
       spawnPoints -= 100;
     }
-    if (millis() - lastSpawn > spawnPeriod * 0.96 && spawnLevel <= 256  && spawnPoints >= 10 && stage == 2) {
+    if (millis() - lastSpawn > spawnPeriod * random(4) && spawnLevel <= 100  && spawnPoints >= 10 && stage == 2) {
       spawnHyperLilShip();
       spawnPoints -= 10;
     }
 
-    if (millis() - lastSpawn > spawnPeriod && spawnPoints >= 30 && spawnLevel <= 300 && stage == 2) {
+    if (millis() - lastSpawn > spawnPeriod * random(4) && spawnPoints >= 30 && spawnLevel <= 50 && stage == 2) {
       spawnEliteFatRocket();
       spawnPoints -= 30;
     }
-    if (millis() - lastSpawn > spawnPeriod * 0.99 && spawnPoints >= 300 && spawnLevel <= 2000 && stage == 2) {
+    if (millis() - lastSpawn > spawnPeriod * random(3) && spawnPoints >= 300 && spawnLevel <= 300 && stage == 2) {
       spawnBoltzyme();
       spawnPoints -= 300;
     }
-    if (millis() - lastSpawn > spawnPeriod * 0.98 && spawnPoints >= 750 && stage == 2) {
+    if (millis() - lastSpawn > spawnPeriod * random(2) && spawnPoints >= 750 && stage == 2) {
       spawnMegaBall();
       spawnPoints -= 750;
     }
@@ -105,11 +120,21 @@ class SpawnManager { //I'm having a bug where it doesn't change to level 2, some
     if (millis() - stagePhaseTime >= stagePhaseTimeSet && bossPrepared == false) {
       shopHere = true;
     }
-    if (millis() - stagePhaseTime >= stagePhaseTimeSet && bossPrepared == true && stage == 1 && bossSpawned == false) {
-      spawnVeryFatRocket();
-      bossHere = true;
-      bossSpawned = true;
-      stagePhaseTime = millis();
+    for (Enemy e : enemies) {
+      if (millis() - stagePhaseTime >= stagePhaseTimeSet && bossPrepared == true && stage == 1 && bossSpawned == false) {
+        e.hp = 0;
+        spawnVeryFatRocket();
+        bossHere = true;
+        bossSpawned = true;
+        stagePhaseTime = millis();
+      }
+      if (millis() - stagePhaseTime >= stagePhaseTimeSet && bossPrepared == true && stage == 2 && bossSpawned == false) {
+        e.hp = 0;
+        spawnImportableComputer();
+        bossHere = true;
+        bossSpawned = true;
+        stagePhaseTime = millis();
+      }
     }
     if (cKeyPressed) {
       shopHere = false;
@@ -291,7 +316,10 @@ class SpawnManager { //I'm having a bug where it doesn't change to level 2, some
     lastSpawn = millis();
   }
   void spawnVeryFatRocket() {
-    bossEnemies1.add(new VeryFatRocket(new PVector(700, -160), new PVector(0, 0.08), 0, 2, "enemy_veryfatrocket.png", new BoundingBox(new PVector(0, 0), new PVector(160, 120)), 2, 0, 20000, 20000));
+    bossEnemies1.add(new VeryFatRocket(new PVector(700, -160), new PVector(0, 0.08), 0, 2, "enemy_veryfatrocket.png", new BoundingBox(new PVector(0, 0), new PVector(160, 120)), 2, 0, 20000));
+  }
+  void spawnImportableComputer() {
+    bossEnemies2.add(new ImportableComputer(new PVector(700, -160), new PVector(0, 0.1), 0, 2, "enemy_importablecomputer.png", new BoundingBox(new PVector(0, 0), new PVector(120, 120)), 2, 0, 20000));
   }
   void shopSpawnedHealthCollectible() {
     float posx = random(1400);
