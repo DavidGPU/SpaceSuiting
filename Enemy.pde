@@ -2,12 +2,14 @@ abstract class  Enemy extends GameObject {
   PVector healthBarPos = new PVector(position.x + (width * 0.5), position.y + (height * 1.2));
   PVector liveHealthBarSize = new PVector(this.hp * 0.1, 6);
   PVector maxHealthBarSize = new PVector(this.hpMax * 0.1, 6);
+  PVector aimedShot;
   int defense;
   int superDefense;
   int hp;
   int hpMax;
   long lastProjectile;
   float dropChance = random(4);
+  float aimedAngle;
 
   Enemy(PVector position, PVector velocity, float orientation, int scale, String spriteName, BoundingBox hitbox, int defense, int superDefense, int hp) {
     super(position, velocity, orientation, scale, spriteName, hitbox);
@@ -34,16 +36,30 @@ abstract class  Enemy extends GameObject {
         hp -= pp.damage;
       }
     }
+    for (Spaceship ss : spaceships) {
+      aimedShot = PVector.fromAngle(aimedAngle);
+      aimedAngle = PVector.angleBetween(this.position, ss.position);
+    }
+
+
     super.update();
+
     if (isDead()) {
-      points += value();
-      money += value();
+      for(SpawnManager sm : spawnManagers) {
+      points += value() * difficulty * sm.stage;
+      money += value() * sm.stage;
       spawnDamageCollectible();
+      //spawnDeathBallEffect();
+      }
     }
     if (isDead() && dropChance >= 0 && dropChance <= 1) 
       spawnDamageCollectible2();
   }
 
+  void spawnDeathBallEffect() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    deathBallEffects.add(new DeathBallEffect(new PVector(bulletPosition.x, bulletPosition.y)));
+  }
   void spawnDamageCollectible() {
     PVector bulletPosition = new PVector(position.x, position.y);
     bulletPosition.y += 0;
