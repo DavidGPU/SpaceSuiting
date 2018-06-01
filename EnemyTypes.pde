@@ -15,7 +15,7 @@ class LilShip extends Enemy {
       shootEasy();
     if (millis() - lastProjectile > 1500 && difficulty == 2)
       shootNormal();
-    if (millis() - lastProjectile > 750 && difficulty == 3)
+    if (millis() - lastProjectile > 850 && difficulty == 3)
       shootHard();
   }
 
@@ -37,7 +37,7 @@ class LilShip extends Enemy {
     PVector bulletPosition = new PVector(position.x, position.y);
     bulletPosition.y += 20;
     bulletPosition.x += 0;
-    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, 8), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, 5), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
     lastProjectile = millis();
   }
 }
@@ -720,7 +720,7 @@ class LilX extends Enemy {
       shootEasy();
     if (millis() - lastProjectile > 2000 && difficulty == 2)
       shootNormal();
-    if (millis() - lastProjectile > 1000 && difficulty == 3)
+    if (millis() - lastProjectile > 1750 && difficulty == 3)
       shootHard();
   }
 
@@ -748,10 +748,10 @@ class LilX extends Enemy {
     PVector bulletPosition = new PVector(position.x, position.y);
     bulletPosition.y += 0;
     bulletPosition.x += 0;
-    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0.1, 0.1), 0, 2, "ep_greenball.png", new BoundingBox(new PVector(0, 0), new PVector(14, 14)), new PVector(0.05, 0.05)));
-    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(-0.1, -0.1), 0, 2, "ep_greenball.png", new BoundingBox(new PVector(0, 0), new PVector(14, 14)), new PVector(-0.05, -0.05)));
-    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(-0.1, 0.1), 0, 2, "ep_greenball.png", new BoundingBox(new PVector(0, 0), new PVector(14, 14)), new PVector(-0.05, 0.05)));
-    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0.1, -0.1), 0, 2, "ep_greenball.png", new BoundingBox(new PVector(0, 0), new PVector(14, 14)), new PVector(0.05, -0.05)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0.1, 0.1), 0, 2, "ep_greenball.png", new BoundingBox(new PVector(0, 0), new PVector(14, 14)), new PVector(0.02, 0.02)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(-0.1, -0.1), 0, 2, "ep_greenball.png", new BoundingBox(new PVector(0, 0), new PVector(14, 14)), new PVector(-0.02, -0.02)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(-0.1, 0.1), 0, 2, "ep_greenball.png", new BoundingBox(new PVector(0, 0), new PVector(14, 14)), new PVector(-0.02, 0.02)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0.1, -0.1), 0, 2, "ep_greenball.png", new BoundingBox(new PVector(0, 0), new PVector(14, 14)), new PVector(0.02, -0.02)));
     lastProjectile = millis();
   }
 }
@@ -1066,6 +1066,10 @@ class VeryFatRocket extends Enemy {
 
   void update() {
     super.update();
+    if((hp <= hpMax * 0.75 && hp >= hpMax * 0.5) || (hp <= hpMax * 0.25))
+    redness = 255;
+    if((hp <= hpMax * 0.5 && hp >= hpMax * 0.25) || (hp >= hpMax * 0.75))
+    redness = 0;
     if (millis() - lastProjectile > 2000 && hp >= hpMax * 0.25)
       shoot();
     if (millis() - lastproj2 > 400 && hp >= hpMax * 0.25 && difficulty == 1)
@@ -1082,11 +1086,17 @@ class VeryFatRocket extends Enemy {
       shoot3Hard();
     if (millis() - lastproj4 > 2000  && hp <= hpMax * 0.5 && hp >= hpMax * 0.25)
       shoot4();
-    if (millis() - lastproj5 > 200  && hp <= hpMax * 0.25 && difficulty == 1)
+    if (millis() - lastproj5 > 300  && hp <= hpMax * 0.25 && difficulty == 1)
       shoot5();
     if (millis() - lastproj5 > 200  && hp <= hpMax * 0.25 && difficulty == 2)
       shoot5();
-    if (millis() - lastproj5 > 200  && hp <= hpMax* 0.25 && difficulty == 3)
+    if (millis() - lastproj5 > 100  && hp <= hpMax* 0.25 && difficulty == 3)
+      shoot5();
+    if (millis() - lastproj5 > 150  && hp <= hpMax* 0.5 && hp >= 0.75 && difficulty == 1)
+      shoot5();
+    if (millis() - lastproj5 > 100  && hp <= hpMax* 0.5 && hp >= 0.75 && difficulty == 2)
+      shoot5();
+    if (millis() - lastproj5 > 50  && hp <= hpMax* 0.5 && hp >= 0.75 && difficulty == 3)
       shoot5();
     if (millis() - lastproj6 > 250  && hp <= hpMax * 0.25)
       shoot6();
@@ -1247,6 +1257,17 @@ class ImportableComputer extends Enemy {
       shoot0Hard();
     if (millis() - lastProjectile > 3000 && difficulty == 1 && (hp > hpMax * 0.8 || hp < hpMax * 0.2))
       shoot1Easy();
+    if (hp > hpMax * 0.6 && hp < hpMax * 0.4)
+    redness = 122;
+    if (hp > hpMax * 0.4 && hp < hpMax * 0.2)    
+    greeness = 122;
+    if (hp > hpMax * 0.2 && hp < hpMax * 0.4)
+    blueness = 122;
+    if (hp < hpMax * 0.2) {
+    redness = 255;
+    greeness = 255;
+    blueness = 255;
+    }
     if (millis() - lastProjectile > 2000 && difficulty == 2 && (hp > hpMax * 0.8 || hp < hpMax * 0.2))
       shoot1Normal();
     if (millis() - lastProjectile > 1000 && difficulty == 3 && (hp > hpMax * 0.8 || hp < hpMax * 0.2))
@@ -1417,22 +1438,22 @@ class ImportableComputer extends Enemy {
   }
   void shoot5Easy() {
     PVector bulletPosition = new PVector(position.x, position.y);
-float bulletVelX = random(-1, 1);
-float bulletVelY = random(-1, 1);
+    float bulletVelX = random(-1, 1);
+    float bulletVelY = random(-1, 1);
     commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(bulletVelX, bulletVelY), 0, 2, "ep_greenball.png", new BoundingBox(new PVector(0, 0), new PVector(14, 14)), new PVector(0, 0)));
     lastProjectile5 = millis();
   }
   void shoot5Normal() {
     PVector bulletPosition = new PVector(position.x, position.y);
-float bulletVelX = random(-2, 2);
-float bulletVelY = random(-2, 2);
+    float bulletVelX = random(-2, 2);
+    float bulletVelY = random(-2, 2);
     commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(bulletVelX, bulletVelY), 0, 2, "ep_greenball.png", new BoundingBox(new PVector(0, 0), new PVector(14, 14)), new PVector(0, 0)));
     lastProjectile5 = millis();
   }
   void shoot5Hard() {
     PVector bulletPosition = new PVector(position.x, position.y);
-float bulletVelX = random(-3, 3);
-float bulletVelY = random(-3, 3);
+    float bulletVelX = random(-3, 3);
+    float bulletVelY = random(-3, 3);
     commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(bulletVelX, bulletVelY), 0, 2, "ep_greenball.png", new BoundingBox(new PVector(0, 0), new PVector(14, 14)), new PVector(0, 0)));
     lastProjectile5 = millis();
   }
@@ -1442,5 +1463,261 @@ float bulletVelY = random(-3, 3);
     float positionY = random(height);
     position = new PVector(positionX, positionY);
     lastTeleport = millis();
+  }
+}
+
+// KILLERSHIP
+class KillerShip extends Enemy {
+
+  KillerShip(PVector position, PVector velocity, float orientation, int scale, String spriteName, BoundingBox hitbox, int defense, int superDefense, int hp) {
+    super(position, velocity, orientation, scale, spriteName, hitbox, defense, superDefense, hp);
+  }
+
+  int value() {
+    return 100;
+  }
+
+  void update() {
+    super.update();
+    if (millis() - lastProjectile > 100 && difficulty == 1)
+      shootEasy();
+    if (millis() - lastProjectile > 1500 && difficulty == 2)
+      shootNormal();
+    if (millis() - lastProjectile > 750 && difficulty == 3)
+      shootHard();
+  }
+
+  void shootEasy() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 20;
+    bulletPosition.x += 0;
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, aimedShot, 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    lastProjectile = millis();
+  }
+  void shootNormal() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 20;
+    bulletPosition.x += 0;
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(aimedShot.x, aimedShot.y), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    lastProjectile = millis();
+  }
+  void shootHard() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 20;
+    bulletPosition.x += 0;
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, 8), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    lastProjectile = millis();
+  }
+}
+
+// MEGABOXSHIP
+class MegaBoxShip extends Enemy {
+  long lastProj0;
+  long lastProj02;
+  long lastProj2;
+  long lastProj3;
+
+  MegaBoxShip(PVector position, PVector velocity, float orientation, int scale, String spriteName, BoundingBox hitbox, int defense, int superDefense, int hp) {
+    super(position, velocity, orientation, scale, spriteName, hitbox, defense, superDefense, hp);
+  }
+
+  int value() {
+    return 2000;
+  }
+
+  void update() {
+    velocity.y = 3 - (hpMax - hp) * -0.0001;
+      if (position.y >= height + 100) {
+        teleport();
+    }
+    super.update();
+    if (hp > hpMax * 0.50 && hp < hpMax * 0.75) {
+    blueness = 255;
+    }
+    if (hp < hpMax * 0.25) {
+    greeness = 255;
+    blueness = 122;
+    }
+        if (hp > hpMax * 0.75 || (hp < hpMax * 0.5 && hp > hpMax * 0.25)) {
+        redness = 0;
+        greeness = 0;
+        blueness = 0;
+        }
+    if (millis() - lastProj0 > 5000 / difficulty && (hp <= hpMax * 0.25 || hp >= hpMax * 0.5))
+      shoot0();
+    if (millis() - lastProj02 > 4000 / difficulty && hp <= hpMax * 0.5)
+      shoot02();
+    if (millis() - lastProjectile > 2000 && difficulty == 1 && (hp > hpMax * 0.75 || hp < hpMax * 0.5))
+      shoot1Easy();
+    if (millis() - lastProjectile > 1500 && difficulty == 2 && (hp > hpMax * 0.75 ||  hp < hpMax * 0.5))
+      shoot1Normal();
+    if (millis() - lastProjectile > 750 && difficulty == 3 && (hp > hpMax * 0.75 ||  hp < hpMax * 0.5))
+      shoot1Hard();
+          if (millis() - lastProj2 > 2000 && difficulty == 1 && ((hp > hpMax * 0.50 && hp < hpMax * 0.75) || hp < hpMax * 0.25))
+      shoot2Easy();
+          if (millis() - lastProj2 > 1000 && difficulty == 2 && ((hp > hpMax * 0.50 && hp < hpMax * 0.75) || hp < hpMax * 0.25))
+      shoot2Normal();
+          if (millis() - lastProj2 > 650 && difficulty == 3 && ((hp > hpMax * 0.50 && hp < hpMax * 0.75) || hp < hpMax * 0.25))
+      shoot2Hard();
+          if (millis() - lastProj3 > 3000 && difficulty == 1 && hp < hpMax * 0.25)
+      shoot3Easy();
+          if (millis() - lastProj3 > 2000 && difficulty == 2 && hp < hpMax * 0.25)
+      shoot3Normal();
+          if (millis() - lastProj3 > 1000 && difficulty == 3 && hp < hpMax * 0.25)
+      shoot3Hard();
+  }
+
+void teleport() {
+  for (Spaceship ss : spaceships) {
+  this.position.x = ss.position.x;
+  this.position.y = -100;
+  }
+}
+  void shoot0() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 0;
+    bulletPosition.x += 0;
+    enemies.add(new LilShip(bulletPosition, new PVector(0, 0.2), 0, 2, "enemy_lil_ship.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), 2, 0, 18));
+    lastProj0 = millis();
+  }
+  void shoot02() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 0;
+    bulletPosition.x += 0;
+    enemies.add(new BoxShip(bulletPosition, new PVector(0, 0.3), 0, 2, "enemy_boxship.png", new BoundingBox(new PVector(0, 0), new PVector(32, 32)), 2, 0, 25));
+    lastProj02 = millis();
+  }
+  void shoot1Easy() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 0;
+    bulletPosition.x += 0;
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, 1), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, -1), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(1, 0), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(-1, 0), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    lastProjectile = millis();
+  }
+  void shoot1Normal() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 0;
+    bulletPosition.x += 0;
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, 1), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, -1), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(1, 0), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(-1, 0), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, 2), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, -2), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(2, 0), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(-2, 0), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    lastProjectile = millis();
+  }
+  void shoot1Hard() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 0;
+    bulletPosition.x += 0;
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, 0), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0.02)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, 0), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, -0.02)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, 0), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0.02, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, 0), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(-0.02, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, 0), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0.04)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, 0), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, -0.04)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, 0), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0.04, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, 0), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(-0.04, 0)));
+    lastProjectile = millis();
+  }
+    void shoot2Easy() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 0;
+    bulletPosition.x += 0;
+    commonEnemyProjectiles.add(new RandomEnemyProjectile(bulletPosition, new PVector(0, 0), 0, 2, "ep_monochrome_square.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0), 1.5));
+    lastProj2 = millis();
+  }
+    void shoot2Normal() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 0;
+    bulletPosition.x += 0;
+    commonEnemyProjectiles.add(new RandomEnemyProjectile(bulletPosition, new PVector(0, 0), 0, 2, "ep_monochrome_square.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0), 3));
+    lastProj2 = millis();
+  }
+    void shoot2Hard() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 0;
+    bulletPosition.x += 0;
+    commonEnemyProjectiles.add(new RandomEnemyProjectile(bulletPosition, new PVector(0, 0), 0, 2, "ep_monochrome_square.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0), 4.5));
+    lastProj2 = millis();
+  }
+    void shoot3Easy() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 0;
+    bulletPosition.x += 0;
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, -5), 0, 2, "ep_blood_wheel.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0.1)));
+    lastProj3 = millis();
+  }
+    void shoot3Normal() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 0;
+    bulletPosition.x += 0;
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, -5), 0, 2, "ep_blood_wheel.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0.1)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(2, -5), 0, 2, "ep_blood_wheel.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0.1)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(-2, -5), 0, 2, "ep_blood_wheel.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0.1)));
+    lastProj3 = millis();
+  }
+    void shoot3Hard() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 0;
+    bulletPosition.x += 0;
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, -5), 0, 2, "ep_blood_wheel.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0.1)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(2, -5), 0, 2, "ep_blood_wheel.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0.1)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(-2, -5), 0, 2, "ep_blood_wheel.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0.1)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(4, -5), 0, 2, "ep_blood_wheel.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0.1)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(-4, -5), 0, 2, "ep_blood_wheel.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0.1)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(5, -5), 0, 2, "ep_blood_wheel.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0.1)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(-5, -5), 0, 2, "ep_blood_wheel.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0.1)));
+    lastProj3 = millis();
+  }
+
+}
+
+// BOXSHIP
+class BoxShip extends Enemy {
+
+  BoxShip(PVector position, PVector velocity, float orientation, int scale, String spriteName, BoundingBox hitbox, int defense, int superDefense, int hp) {
+    super(position, velocity, orientation, scale, spriteName, hitbox, defense, superDefense, hp);
+  }
+
+  int value() {
+    return 50;
+  }
+
+  void update() {
+    super.update();
+    if (millis() - lastProjectile > 3000 && difficulty == 1)
+      shootEasy();
+    if (millis() - lastProjectile > 2000 && difficulty == 2)
+      shootNormal();
+    if (millis() - lastProjectile > 1000 && difficulty == 3)
+      shootHard();
+  }
+
+  void shootEasy() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 0;
+    bulletPosition.x += 0;
+    commonEnemyProjectiles.add(new RandomEnemyProjectile(bulletPosition, new PVector(0, 0), 0, 2, "ep_monochrome_square.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0), 1));
+    lastProjectile = millis();
+  }
+  void shootNormal() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 0;
+    bulletPosition.x += 0;
+    commonEnemyProjectiles.add(new RandomEnemyProjectile(bulletPosition, new PVector(0, 0), 0, 2, "ep_monochrome_square.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0), 2));
+    lastProjectile = millis();
+  }
+  void shootHard() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 0;
+    bulletPosition.x += 0;
+    commonEnemyProjectiles.add(new RandomEnemyProjectile(bulletPosition, new PVector(0, 0), 0, 2, "ep_monochrome_square.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0), 3.2));
+    lastProjectile = millis();
   }
 }
