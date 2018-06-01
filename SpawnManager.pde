@@ -3,6 +3,8 @@ class SpawnManager { //I'm having a bug where it doesn't change to level 2, some
 
   long lastSpawn;
 
+boolean boss1IsDead;
+boolean boss2IsDead;
   long spawnPeriod;
   long spawnUpgrade;
   long stagePhaseTime;
@@ -10,7 +12,7 @@ class SpawnManager { //I'm having a bug where it doesn't change to level 2, some
   float spawnPoints;
   float spawnLevel;
   float spawnLevelLevel;
-  float stage = 1; //Change to switch the stage, avaible stages 1 and 2 
+  float stage = 2; //Change to switch the stage, avaible stages 1 and 2 
 
   long shopSpawnHealthCollectible;
   long shopSpawnSuperDamageCollectible;
@@ -29,8 +31,8 @@ class SpawnManager { //I'm having a bug where it doesn't change to level 2, some
   boolean bossSpawned;
 
   void update() {
-    for (Enemy be1 : bossEnemies1) {
-      if (be1.isDead()) {
+    float bossChance = random(2);
+        if (boss1IsDead) {
         println("now");
         bossPrepared = false;
         bossHere = false;
@@ -41,10 +43,9 @@ class SpawnManager { //I'm having a bug where it doesn't change to level 2, some
         spawnPoints = 0;
         spawnLevel = 0;
         spawnLevelLevel = 0;
-      }
-    }
-    for (Enemy be2 : bossEnemies2) {
-      if (be2.isDead()) {
+        }  
+      
+    if (boss2IsDead) {
         println("now");
         bossPrepared = false;
         bossHere = false;
@@ -55,7 +56,6 @@ class SpawnManager { //I'm having a bug where it doesn't change to level 2, some
         spawnPoints = 0;
         spawnLevel = 0;
         spawnLevelLevel = 0;
-      }
     }
 
     if (stage == 1)
@@ -74,6 +74,10 @@ class SpawnManager { //I'm having a bug where it doesn't change to level 2, some
     }
     if (millis() - lastSpawn > spawnPeriod * random(6) && spawnPoints >= 50 && stage == 1 && spawnLevel <= 300) {
       spawnArchShip();
+      spawnPoints -= 50;
+    }
+    if (millis() - lastSpawn > spawnPeriod * random(7) && spawnPoints >= 50 && stage == 1 && spawnLevel <= 400) {
+      spawnBoxShip();
       spawnPoints -= 50;
     }
     if (millis() - lastSpawn > spawnPeriod * random(6) && spawnPoints >= 60 && stage == 1 && spawnLevel <= 900) {
@@ -121,9 +125,16 @@ class SpawnManager { //I'm having a bug where it doesn't change to level 2, some
       shopHere = true;
     }
     for (Enemy e : enemies) {
-      if (millis() - stagePhaseTime >= stagePhaseTimeSet && bossPrepared == true && stage == 1 && bossSpawned == false) {
+      if (millis() - stagePhaseTime >= stagePhaseTimeSet && bossPrepared == true && stage == 1 && bossSpawned == false && bossChance < 1) {
         e.hp = 0;
         spawnVeryFatRocket();
+        bossHere = true;
+        bossSpawned = true;
+        stagePhaseTime = millis();
+      }
+      if (millis() - stagePhaseTime >= stagePhaseTimeSet && bossPrepared == true && stage == 1 && bossSpawned == false && bossChance > 1) {
+        e.hp = 0;
+        spawnMegaBoxShip();
         bossHere = true;
         bossSpawned = true;
         stagePhaseTime = millis();
@@ -315,8 +326,23 @@ class SpawnManager { //I'm having a bug where it doesn't change to level 2, some
 
     lastSpawn = millis();
   }
+  void spawnBoxShip() {
+        float velx = random(2);
+    float velxFinal = 0;
+    float enemposx = random(width);
+        if (enemposx > 0 && enemposx < 700) 
+      velxFinal = velx;
+    if (enemposx > 700)
+      velxFinal = 0 - velx;
+    enemies.add(new BoxShip(new PVector(enemposx, -20), new PVector(velxFinal, 0.3), 0, 2, "enemy_boxship.png", new BoundingBox(new PVector(0, 0), new PVector(20, 20)), 2, 0, 10));
+
+    lastSpawn = millis();
+  }
   void spawnVeryFatRocket() {
     bossEnemies1.add(new VeryFatRocket(new PVector(700, -160), new PVector(0, 0.08), 0, 2, "enemy_veryfatrocket.png", new BoundingBox(new PVector(0, 0), new PVector(160, 120)), 2, 0, 20000));
+  }
+  void spawnMegaBoxShip() {
+    bossEnemies1.add(new MegaBoxShip(new PVector(700, -160), new PVector(0, 5), 0, 2, "enemy_megaboxship.png", new BoundingBox(new PVector(0, 0), new PVector(100, 100)), 9, 0, 10000));
   }
   void spawnImportableComputer() {
     bossEnemies2.add(new ImportableComputer(new PVector(700, -160), new PVector(0, 0.1), 0, 2, "enemy_importablecomputer.png", new BoundingBox(new PVector(0, 0), new PVector(120, 120)), 2, 0, 20000));
