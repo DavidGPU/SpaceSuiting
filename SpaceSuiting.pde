@@ -1,15 +1,26 @@
 
+import processing.sound.*;
 SoundFile backgroundMusic;
 SoundFile soundEffect;
 
 //Add Peter Lager in Special Thanks in credits
 
+int redness;
+int greeness;
+int blueness;
 PFont font;
 int points; //The score of the player
 int money; //Stuff to spend on teams
 int difficulty = 1; //You can change this from 1 to 3, trying different numbers will do strange things
+int backgroundRedness;
+
+float getAngle_In_Degrees(float pX1, float pY1, float pX2, float pY2) {
+  return atan2(pY2 - pY1, pX2 - pX1);
+}
+
 
 ArrayList<Spaceship> spaceships;
+ArrayList<DeathBallEffect>deathBallEffects;
 ArrayList<PlayerProjectile> playerProjectiles;
 ArrayList<Enemy> enemies;
 ArrayList<Enemy> bossEnemies1;
@@ -56,12 +67,13 @@ void displaySpace() { //The background
 void setup() {
   font = createFont("Arial", 16, true);
   points = 0;
-  size(1400, 1000, P2D);
+  size(1400, 1000);
   noSmooth();
   frameRate(60);
   backgroundMusic = new SoundFile(this, "Yayeyi.flac"); //The music that plays
 
   playerProjectiles = new ArrayList<PlayerProjectile>();
+  deathBallEffects = new ArrayList<DeathBallEffect>();
 
   damageCollectibles = new ArrayList<DamageCollectible>();
   healthCollectibles = new ArrayList<HealthCollectible>();
@@ -86,7 +98,7 @@ void setup() {
   //TriShooter:  6 damage
   Spaceship spaceship = new SpotNick(new PVector(700, 400), new PVector(0, 0), 0, 2, "player_spot_nick.png", new BoundingBox(new PVector(0, 0), new PVector(12, 12)), 9, 0, 7);
   spaceships.add(spaceship);
-  //Enemy importableComputer = new ImportableComputer(new PVector(700, 0), new PVector(0, 0.1), 0, 2, "enemy_importablecomputer.png", new BoundingBox(new PVector(0, 0), new PVector(120, 120)), 9, 0, 20000);
+  //Enemy importableComputer = new MegaBoxShip(new PVector(700, 0), new PVector(0, 5), 0, 2, "enemy_megaboxship.png", new BoundingBox(new PVector(0, 0), new PVector(100, 100)), 9, 0, 10000);
   //bossEnemies2.add(importableComputer);
 
   SpawnManager spawnManager = new SpawnManager(10, 0, 0);
@@ -97,12 +109,13 @@ void setup() {
 
 void draw() {
   ArrayList<GameObject> zombies = new ArrayList<GameObject>();
+  ArrayList<DeathBallEffect> DBEzombies = new ArrayList<DeathBallEffect>();
   ArrayList<DamageCollectible> zombieDamageCollectibles = new ArrayList<DamageCollectible>();
   ArrayList<Enemy> zombieenemies = new ArrayList<Enemy>();
   ArrayList<Spaceship> zombiesSpaceship = new ArrayList<Spaceship>();
 
-  for (SpawnManager spawnManager : spawnManagers)
-    spawnManager.update();
+
+
 
   for (PlayerProjectile projectille : playerProjectiles) {
     projectille.update();
@@ -110,6 +123,11 @@ void draw() {
       zombies.add(projectille);
     if (projectille.hit == true)
       points += 2;
+  }
+  for (DeathBallEffect dbe : deathBallEffects) {
+    dbe.update();
+    if (dbe.isGone())
+      DBEzombies.add(dbe);
   }
   for (MotherEnemyProjectile projectille : commonEnemyProjectiles) {
     projectille.update();
@@ -156,18 +174,33 @@ void draw() {
       zombieenemies.add(enemy);
   }
   for (Enemy be1 : bossEnemies1) {
-    be1.update();
-    if (be1.isDead())
-      zombieenemies.add(be1);  
+    for (SpawnManager sm : spawnManagers) {
+      be1.update();
+      if (be1.isDead()) {
+        zombieenemies.add(be1);
+        sm.boss1IsDead = true;
+        redness = 0;
+        greeness = 0;
+        blueness = 0;
+      }
+    }
+
     if (be1.isDownTheScreen())
       zombieenemies.add(be1);
   }
   for (Enemy be2 : bossEnemies2) {
-    be2.update();
-    if (be2.isDead())
-      zombieenemies.add(be2);  
-    if (be2.isDownTheScreen())
-      zombieenemies.add(be2);
+    for (SpawnManager sm : spawnManagers) {
+      be2.update();
+      if (be2.isDead()) {
+        sm.boss2IsDead = true;
+        zombieenemies.add(be2); 
+        redness = 0;
+        greeness = 0;
+        blueness = 0;
+      }
+      if (be2.isDownTheScreen())
+        zombieenemies.add(be2);
+    }
   }
 
   if (oneKeyPressed)
@@ -178,6 +211,7 @@ void draw() {
     difficulty = 3;
 
   commonEnemyProjectiles.removeAll(zombies);
+  deathBallEffects.removeAll(DBEzombies);
   enemies.removeAll(zombieenemies);
   bossEnemies1.removeAll(zombieenemies);
   bossEnemies2.removeAll(zombieenemies);
@@ -189,12 +223,16 @@ void draw() {
   healthCollectiblesForSale.removeAll(zombies);
   crimnersForSale.removeAll(zombies);
 
-  background(0, 0, 0);
+  background(redness, greeness, blueness);
   displaySpace();
 
   for (Enemy enemy : enemies) {
     enemy.update();
     enemy.display();
+  }
+  for (DeathBallEffect dbe : deathBallEffects) {
+    dbe.update();
+    dbe.display();
   }
   for (Enemy vfrm : bossEnemies1) {
     vfrm.update();
@@ -227,6 +265,9 @@ void draw() {
   for (Spaceship spaceship : spaceships) {
     spaceship.update();
     spaceship.display();
+  }
+  for (SpawnManager sm : spawnManagers) {
+    sm.update();
   }
 
   for (Projectile projectille : playerProjectiles)
