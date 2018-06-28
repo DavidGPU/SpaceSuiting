@@ -1,4 +1,4 @@
-// MOTHER PROJECTILE
+
 abstract class Projectile extends GameObject {
   PVector gravity;
 
@@ -12,10 +12,6 @@ abstract class Projectile extends GameObject {
   void update() {
     velocity.add(gravity);
     super.update();
-    for (Enemy e : enemies) {
-      if (e.position.y > 400 ) {
-      }
-    }
   }
 
   void display() {
@@ -118,4 +114,52 @@ class RandomEnemyProjectile extends CommonEnemyProjectile {
       velocity.y = 0;
 
    } 
+}
+
+// HIVE ENEMY PROJECTILE
+
+class HiveEnemyProjectile extends CommonEnemyProjectile {
+long lastSpawnPlus;
+  int bulletSpawnPlus;
+long lastSpawnX;
+  int bulletSpawnX;
+  float speedPlus;
+  float speedX;
+  
+  HiveEnemyProjectile(PVector position, PVector velocity, float orientation, int scale, String spriteName, BoundingBox hitbox, PVector gravity, int bulletSpawnPlus, int bulletSpawnX, float speedPlus, float speedX) {
+    super(position, velocity, orientation, scale, spriteName, hitbox, gravity);
+    this.bulletSpawnPlus = bulletSpawnPlus;
+    this.bulletSpawnX = bulletSpawnX;
+    this.speedPlus = speedPlus;
+    this.speedX = speedX;
+  }
+  
+  void update() {
+  super.update();
+      if (millis() - lastSpawnPlus > bulletSpawnPlus)
+      shootPlus();
+    if (millis() - lastSpawnX > bulletSpawnX)
+      shootX();
+  }
+    void shootPlus() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 20;
+    bulletPosition.x += 0;
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, speedPlus), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(0, -speedPlus), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(speedPlus, 0), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(-speedPlus, 0), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    lastSpawnPlus = millis();
+  }
+  void shootX() {
+    PVector bulletPosition = new PVector(position.x, position.y);
+    bulletPosition.y += 20;
+    bulletPosition.x += 0;
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(speedX, speedX), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(-speedX, -speedX), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(speedX, -speedX), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(-speedX, speedX), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
+    lastSpawnX = millis();
+  }
+
 }
