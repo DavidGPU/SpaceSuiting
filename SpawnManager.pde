@@ -3,8 +3,8 @@ class SpawnManager { //I'm having a bug where it doesn't change to level 2, some
 
   long lastSpawn;
 
-boolean boss1IsDead;
-boolean boss2IsDead;
+  boolean boss1IsDead;
+  boolean boss2IsDead;
   long spawnPeriod;
   long spawnUpgrade;
   long stagePhaseTime;
@@ -12,7 +12,7 @@ boolean boss2IsDead;
   float spawnPoints;
   float spawnLevel;
   float spawnLevelLevel;
-  float stage = 2; //Change to switch the stage, avaible stages 1 and 2 
+  float stage = 1; //Change to switch the stage, avaible stages 1 and 2 
 
   long shopSpawnHealthCollectible;
   long shopSpawnSuperDamageCollectible;
@@ -32,30 +32,30 @@ boolean boss2IsDead;
 
   void update() {
     float bossChance = random(2);
-        if (boss1IsDead) {
-        println("now");
-        bossPrepared = false;
-        bossHere = false;
-        bossSpawned = false;
-        stagePhaseTime = 0;
-        stage = 2;
-        spawnPeriod = 0;
-        spawnPoints = 0;
-        spawnLevel = 0;
-        spawnLevelLevel = 0;
-        }  
-      
+    if (boss1IsDead) {
+      println("now");
+      bossPrepared = false;
+      bossHere = false;
+      bossSpawned = false;
+      stagePhaseTime = 0;
+      stage = 2;
+      spawnPeriod = 0;
+      spawnPoints = 0;
+      spawnLevel = 0;
+      spawnLevelLevel = 0;
+    }  
+
     if (boss2IsDead) {
-        println("now");
-        bossPrepared = false;
-        bossHere = false;
-        bossSpawned = false;
-        stagePhaseTime = 0;
-        stage = 3;
-        spawnPeriod = 0;
-        spawnPoints = 0;
-        spawnLevel = 0;
-        spawnLevelLevel = 0;
+      println("now");
+      bossPrepared = false;
+      bossHere = false;
+      bossSpawned = false;
+      stagePhaseTime = 0;
+      stage = 3;
+      spawnPeriod = 0;
+      spawnPoints = 0;
+      spawnLevel = 0;
+      spawnLevelLevel = 0;
     }
 
     if (stage == 1)
@@ -80,15 +80,15 @@ boolean boss2IsDead;
       spawnBoxShip();
       spawnPoints -= 50;
     }
-    if (millis() - lastSpawn > spawnPeriod * random(6) && spawnPoints >= 60 && stage == 1 && spawnLevel <= 900) {
+    if (millis() - lastSpawn > spawnPeriod * random(6) && spawnPoints >= 60 && stage == 1 && spawnLevel <= 500) {
       spawnFatRocket();
       spawnPoints -= 60;
     }
-    if (millis() - lastSpawn > spawnPeriod * random(5) && spawnPoints >= 80 && stage ==1 && spawnLevel <= 1000) {
+    if (millis() - lastSpawn > spawnPeriod * random(5) && spawnPoints >= 80 && stage ==1 && spawnLevel <= 500) {
       spawnLilX();
       spawnPoints -= 80;
     }
-    if (millis() - lastSpawn > spawnPeriod * random(3) && spawnPoints >= 85 && stage ==1) {
+    if (millis() - lastSpawn > spawnPeriod * random(3) && spawnPoints >= 85 && stage == 1 && spawnLevel <= 500) {
       spawnCrusaderShip();
       spawnPoints -= 85;
     }
@@ -96,20 +96,31 @@ boolean boss2IsDead;
       spawnHyperLilShip();
       spawnPoints -= 100;
     }
-    if (millis() - lastSpawn > spawnPeriod * random(4) && spawnLevel <= 100  && spawnPoints >= 10 && stage == 2) {
+    if (millis() - lastSpawn > spawnPeriod * random(7) && spawnLevel <= 100  && spawnPoints >= 10 && stage == 2) {
       spawnHyperLilShip();
       spawnPoints -= 10;
     }
-
+    if (millis() - lastSpawn > spawnPeriod * random(4) && spawnLevel <= 200  && spawnPoints >= 15 && stage == 2) {
+      spawnBoxShip();
+      spawnPoints -= 15;
+    }
+    if (millis() - lastSpawn > spawnPeriod * random(4) && spawnLevel <= 350  && spawnPoints >= 75 && stage == 2) {
+      spawnBoxShipElite();
+      spawnPoints -= 75;
+    }
     if (millis() - lastSpawn > spawnPeriod * random(4) && spawnPoints >= 30 && spawnLevel <= 50 && stage == 2) {
       spawnEliteFatRocket();
       spawnPoints -= 30;
     }
-    if (millis() - lastSpawn > spawnPeriod * random(3) && spawnPoints >= 300 && spawnLevel <= 300 && stage == 2) {
+    if (millis() - lastSpawn > spawnPeriod * random(4) && spawnPoints >= 400 && spawnLevel <= 300 && stage == 2) {
       spawnBoltzyme();
       spawnPoints -= 300;
     }
-    if (millis() - lastSpawn > spawnPeriod * random(2) && spawnPoints >= 750 && stage == 2) {
+    if (millis() - lastSpawn > spawnPeriod * random(4) && spawnPoints >= 400 && spawnLevel <= 600 && stage == 2) {
+      spawnChaosedron();
+      spawnPoints -= 400;
+    }
+    if (millis() - lastSpawn > spawnPeriod * random(4) && spawnPoints >= 750 && stage == 2) {
       spawnMegaBall();
       spawnPoints -= 750;
     }
@@ -125,26 +136,31 @@ boolean boss2IsDead;
       shopHere = true;
     }
     for (Enemy e : enemies) {
-      if (millis() - stagePhaseTime >= stagePhaseTimeSet && bossPrepared == true && stage == 1 && bossSpawned == false && bossChance < 1) {
-        e.hp = 0;
-        spawnVeryFatRocket();
-        bossHere = true;
-        bossSpawned = true;
-        stagePhaseTime = millis();
-      }
-      if (millis() - stagePhaseTime >= stagePhaseTimeSet && bossPrepared == true && stage == 1 && bossSpawned == false && bossChance > 1) {
-        e.hp = 0;
-        spawnMegaBoxShip();
-        bossHere = true;
-        bossSpawned = true;
-        stagePhaseTime = millis();
-      }
-      if (millis() - stagePhaseTime >= stagePhaseTimeSet && bossPrepared == true && stage == 2 && bossSpawned == false) {
-        e.hp = 0;
-        spawnImportableComputer();
-        bossHere = true;
-        bossSpawned = true;
-        stagePhaseTime = millis();
+      for (CommonEnemyProjectile ee : commonEnemyProjectiles) {
+        if (millis() - stagePhaseTime >= stagePhaseTimeSet && bossPrepared == true && stage == 1 && bossSpawned == false && bossChance < 1) {
+          e.isDead();
+          ee.isOffScreen();
+          spawnVeryFatRocket();
+          bossHere = true;
+          bossSpawned = true;
+          stagePhaseTime = millis();
+        }
+        if (millis() - stagePhaseTime >= stagePhaseTimeSet && bossPrepared == true && stage == 1 && bossSpawned == false && bossChance > 1) {
+          e.isDead();
+          ee.isOffScreen();
+          spawnMegaBoxShip();
+          bossHere = true;
+          bossSpawned = true;
+          stagePhaseTime = millis();
+        }
+        if (millis() - stagePhaseTime >= stagePhaseTimeSet && bossPrepared == true && stage == 2 && bossSpawned == false) {
+          e.isDead();
+          ee.isOffScreen();
+          spawnImportableComputer();
+          bossHere = true;
+          bossSpawned = true;
+          stagePhaseTime = millis();
+        }
       }
     }
     if (cKeyPressed) {
@@ -326,15 +342,40 @@ boolean boss2IsDead;
 
     lastSpawn = millis();
   }
-  void spawnBoxShip() {
-        float velx = random(2);
+  void spawnChaosedron() {
+    float velx = random(2);
     float velxFinal = 0;
     float enemposx = random(width);
-        if (enemposx > 0 && enemposx < 700) 
+    if (enemposx > 0 && enemposx < 700) 
+      velxFinal = velx;
+    if (enemposx > 700)
+      velxFinal = 0 - velx;
+    enemposx = random(0, 1400);
+    enemies.add(new Chaosedron(new PVector(enemposx, -80), new PVector(velxFinal, 0.5), 0, 2, "enemy_chaosedron.png", new BoundingBox(new PVector(0, 0), new PVector(40, 160)), 2, 0, 550));
+
+    lastSpawn = millis();
+  }
+  void spawnBoxShip() {
+    float velx = random(2);
+    float velxFinal = 0;
+    float enemposx = random(width);
+    if (enemposx > 0 && enemposx < 700) 
       velxFinal = velx;
     if (enemposx > 700)
       velxFinal = 0 - velx;
     enemies.add(new BoxShip(new PVector(enemposx, -20), new PVector(velxFinal, 0.3), 0, 2, "enemy_boxship.png", new BoundingBox(new PVector(0, 0), new PVector(20, 20)), 2, 0, 10));
+
+    lastSpawn = millis();
+  }
+  void spawnBoxShipElite() {
+    float velx = random(2);
+    float velxFinal = 0;
+    float enemposx = random(width);
+    if (enemposx > 0 && enemposx < 700) 
+      velxFinal = velx;
+    if (enemposx > 700)
+      velxFinal = 0 - velx;
+    enemies.add(new EliteBoxShip(new PVector(enemposx, -20), new PVector(velxFinal, 0.3), 0, 2, "enemy_boxship_elite.png", new BoundingBox(new PVector(0, 0), new PVector(20, 20)), 2, 0, 75));
 
     lastSpawn = millis();
   }
