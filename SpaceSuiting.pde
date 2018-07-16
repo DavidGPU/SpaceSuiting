@@ -1,4 +1,3 @@
-
 import processing.sound.*;
 SoundFile backgroundMusic;
 SoundFile soundEffect;
@@ -118,11 +117,11 @@ void createLevel() {
   spawnManagers.add(spawnManager);
 }
 void createDifficulties() {
-  menuObjects2.add(new VeryEasyButton(new PVector(width / 2, height / 2 - 80), new PVector(0, 0), 0, 4, "modesymbol_veryeasy.png", new BoundingBox(new PVector(0, 0), new PVector(40, 40))));
-  menuObjects2.add(new EasyButton(new PVector(width / 2, height / 2 - 40), new PVector(0, 0), 0, 4, "modesymbol_easy.png", new BoundingBox(new PVector(0, 0), new PVector(40, 40))));
-  menuObjects2.add(new NormalButton(new PVector(width / 2, height / 2), new PVector(0, 0), 0, 4, "modesymbol_normal.png", new BoundingBox(new PVector(0, 0), new PVector(40, 40))));
-  menuObjects2.add(new HardButton(new PVector(width / 2, height / 2 + 40), new PVector(0, 0), 0, 4, "modesymbol_hard.png", new BoundingBox(new PVector(0, 0), new PVector(40, 40))));
-  menuObjects2.add(new InsaneButton(new PVector(width / 2, height / 2 + 80), new PVector(0, 0), 0, 4, "modesymbol_insane.png", new BoundingBox(new PVector(0, 0), new PVector(40, 40))));
+  menuObjects2.add(new VeryEasyButton(new PVector(width / 2, height / 2), new PVector(0, 0), 0, 4, "modesymbol_veryeasy.png", new BoundingBox(new PVector(0, 0), new PVector(40, 40))));
+  menuObjects2.add(new EasyButton(new PVector(width / 2, height / 2 + 40), new PVector(0, 0), 0, 4, "modesymbol_easy.png", new BoundingBox(new PVector(0, 0), new PVector(40, 40))));
+  menuObjects2.add(new NormalButton(new PVector(width / 2, height / 2 + 80), new PVector(0, 0), 0, 4, "modesymbol_normal.png", new BoundingBox(new PVector(0, 0), new PVector(40, 40))));
+  menuObjects2.add(new HardButton(new PVector(width / 2, height / 2 + 120), new PVector(0, 0), 0, 4, "modesymbol_hard.png", new BoundingBox(new PVector(0, 0), new PVector(40, 40))));
+  menuObjects2.add(new InsaneButton(new PVector(width / 2, height / 2 + 160), new PVector(0, 0), 0, 4, "modesymbol_insane.png", new BoundingBox(new PVector(0, 0), new PVector(40, 40))));
 }
 void createCharactersToChoose() {
   menuObjects3.add(new SpaceBeeButton(new PVector(width / 2 - 200, height / 2 - 80), new PVector(0, 0), -HALF_PI, 3, "player_space_bee.png", new BoundingBox(new PVector(0, 0), new PVector(60, 60))));
@@ -134,16 +133,48 @@ void createSpaceBee() {
   Spaceship spaceship = new SpaceBee(new PVector(700, 400), new PVector(0, 0), -HALF_PI, 2, "player_space_bee.png", new BoundingBox(new PVector(0, 0), new PVector(12, 12)), 9, 0, 9);
   spaceships.add(spaceship);
 }
+void createSpaceBeeGold() {
+  Spaceship spaceship = new SpaceBeeGold(new PVector(700, 400), new PVector(0, 0), -HALF_PI, 2, "player_space_bee_gold.png", new BoundingBox(new PVector(0, 0), new PVector(12, 12)), 9, 0, 7);
+  spaceships.add(spaceship);
+}
+void createSpaceBeeReaper() {
+  Spaceship spaceship = new SpaceBeeReaper(new PVector(700, 400), new PVector(0, 0), -HALF_PI, 2, "player_space_bee_reaper.png", new BoundingBox(new PVector(0, 0), new PVector(12, 12)), 9, 0, 20);
+  spaceships.add(spaceship);
+}
 void createSpotNick() {
   Spaceship spaceship = new SpotNick(new PVector(700, 400), new PVector(0, 0), 0, 2, "player_spot_nick.png", new BoundingBox(new PVector(0, 0), new PVector(12, 12)), 9, 0, 7);
+  spaceships.add(spaceship);
+}
+void createSpotNickGold() {
+  Spaceship spaceship = new SpotNickGold(new PVector(700, 400), new PVector(0, 0), 0, 2, "player_spot_nick_gold.png", new BoundingBox(new PVector(0, 0), new PVector(12, 12)), 9, 0, 6);
+  spaceships.add(spaceship);
+}
+void createSpotNickSand() {
+  Spaceship spaceship = new SpotNickSand(new PVector(700, 400), new PVector(0, 0), 0, 2, "player_spot_nick_sand.png", new BoundingBox(new PVector(0, 0), new PVector(12, 12)), 9, 0, 3);
   spaceships.add(spaceship);
 }
 void createMightShooter() {
   Spaceship spaceship = new MightShooter(new PVector(700, 400), new PVector(0, 0), 0, 2, "player_might_shooter.png", new BoundingBox(new PVector(0, 0), new PVector(12, 12)), 9, 0, 40);
   spaceships.add(spaceship);
 }
+void createMightShooterGold() {
+  Spaceship spaceship = new MightShooterGold(new PVector(700, 400), new PVector(0, 0), 0, 2, "player_might_shooter_gold.png", new BoundingBox(new PVector(0, 0), new PVector(12, 12)), 9, 0, 13);
+  spaceships.add(spaceship);
+}
+void createMightShooterIce() {
+  Spaceship spaceship = new MightShooterIce(new PVector(700, 400), new PVector(0, 0), 0, 2, "player_might_shooter_ice.png", new BoundingBox(new PVector(0, 0), new PVector(12, 12)), 9, 0, 100);
+  spaceships.add(spaceship);
+}
 void createTriShooter() {
   Spaceship spaceship = new TriShooter(new PVector(700, 400), new PVector(0, 0), 0, 2, "player_trishooter.png", new BoundingBox(new PVector(0, 0), new PVector(12, 12)), 9, 0, 6);
+  spaceships.add(spaceship);
+}
+void createTriShooterGold() {
+  Spaceship spaceship = new TriShooterGold(new PVector(700, 400), new PVector(0, 0), 0, 2, "player_trishooter_gold.png", new BoundingBox(new PVector(0, 0), new PVector(12, 12)), 9, 0, 6);
+  spaceships.add(spaceship);
+}
+void createTriShooterNeon() {
+  Spaceship spaceship = new TriShooterNeon(new PVector(700, 400), new PVector(0, 0), 0, 2, "player_trishooter_neon.png", new BoundingBox(new PVector(0, 0), new PVector(12, 12)), 9, 0, 6);
   spaceships.add(spaceship);
 }
 
@@ -257,16 +288,6 @@ void draw() {
     }
   }
 
-  if (zeroKeyPressed)
-    difficulty = 0.5;
-  if (oneKeyPressed)
-    difficulty = 1;
-  if (twoKeyPressed)
-    difficulty = 2;
-  if (threeKeyPressed)
-    difficulty = 3;
-  if (fourKeyPressed)
-    difficulty = 4;
 
   commonEnemyProjectiles.removeAll(zombies);
   deathBallEffects.removeAll(DBEzombies);
