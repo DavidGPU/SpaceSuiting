@@ -1,4 +1,5 @@
 
+// MOTHER PROJECTILE
 abstract class Projectile extends GameObject {
   PVector gravity;
 
@@ -57,6 +58,37 @@ class PlayerProjectile extends Projectile {
   }
 }
 
+// RANDOM PLAYER PROJECTILE
+class RandomPlayerProjectile extends PlayerProjectile {
+  long timeToEnd;
+
+  float changedVelocity;
+  RandomPlayerProjectile(PVector position, PVector velocity, float orientation, int scale, String spriteName, BoundingBox hitbox, PVector gravity, int damage) {
+    super(position, velocity, orientation, scale, spriteName, hitbox, gravity, damage);
+  }
+
+  void update() {
+    float movementXChance = random(10);
+    float movementYChance = random(10);
+    super.update();
+    if (movementXChance < 1 && position.x < width - 100)
+      velocity.x = changedVelocity;
+    if (movementXChance > 1 && movementXChance < 2 && position.x > 100)
+      velocity.x = -changedVelocity;
+    if (movementXChance > 2)
+      velocity.x = 0;
+    if (movementYChance < 1)
+      velocity.y = changedVelocity;
+    if (movementXChance < 1 && movementYChance > 2  && position.y > 100)
+      velocity.y = -changedVelocity;
+    if (movementYChance > 2)
+      velocity.y = 0;
+    if (millis() - timeToEnd >= 1000)
+      hit = true;
+  }
+}
+
+
 // MOTHER ENEMY PROJECTILE
 
 abstract class MotherEnemyProjectile extends Projectile {
@@ -95,8 +127,8 @@ class RandomEnemyProjectile extends CommonEnemyProjectile {
     super(position, velocity, orientation, scale, spriteName, hitbox, gravity);
     this.changedVelocity = changedVelocity;
   }
-  
-   void update() {
+
+  void update() {
     float movementXChance = random(3);
     float movementYChance = random(3);
     super.update();
@@ -110,22 +142,21 @@ class RandomEnemyProjectile extends CommonEnemyProjectile {
       velocity.y = changedVelocity;
     if (movementXChance < 1 && movementYChance > 2  && position.y > 100)
       velocity.y = -changedVelocity;
-          if (movementYChance > 2)
+    if (movementYChance > 2)
       velocity.y = 0;
-
-   } 
+  }
 }
 
 // HIVE ENEMY PROJECTILE
 
 class HiveEnemyProjectile extends CommonEnemyProjectile {
-long lastSpawnPlus;
+  long lastSpawnPlus;
   int bulletSpawnPlus;
-long lastSpawnX;
+  long lastSpawnX;
   int bulletSpawnX;
   float speedPlus;
   float speedX;
-  
+
   HiveEnemyProjectile(PVector position, PVector velocity, float orientation, int scale, String spriteName, BoundingBox hitbox, PVector gravity, int bulletSpawnPlus, int bulletSpawnX, float speedPlus, float speedX) {
     super(position, velocity, orientation, scale, spriteName, hitbox, gravity);
     this.bulletSpawnPlus = bulletSpawnPlus;
@@ -133,15 +164,15 @@ long lastSpawnX;
     this.speedPlus = speedPlus;
     this.speedX = speedX;
   }
-  
+
   void update() {
-  super.update();
-      if (millis() - lastSpawnPlus > bulletSpawnPlus)
+    super.update();
+    if (millis() - lastSpawnPlus > bulletSpawnPlus)
       shootPlus();
     if (millis() - lastSpawnX > bulletSpawnX)
       shootX();
   }
-    void shootPlus() {
+  void shootPlus() {
     PVector bulletPosition = new PVector(position.x, position.y);
     bulletPosition.y += 20;
     bulletPosition.x += 0;
@@ -161,5 +192,4 @@ long lastSpawnX;
     commonEnemyProjectiles.add(new CommonEnemyProjectile(bulletPosition, new PVector(-speedX, speedX), 0, 2, "ep_littlegrey.png", new BoundingBox(new PVector(0, 0), new PVector(10, 10)), new PVector(0, 0)));
     lastSpawnX = millis();
   }
-
 }
